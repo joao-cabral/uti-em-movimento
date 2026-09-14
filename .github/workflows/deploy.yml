@@ -53,18 +53,18 @@ jobs:
           container="$CONTAINER_NAME"
           domain="$DOMAIN"
 
-          ln -sfn "\$release" "\$app_dir/current"
-          docker rm -f "\$container" 2>/dev/null || true
-          docker run -d \\
-            --name "\$container" \\
-            --restart unless-stopped \\
-            --network kamal \\
-            -v "\$app_dir/current/dist:/usr/share/nginx/html:ro" \\
-            -v "\$app_dir/nginx.conf:/etc/nginx/conf.d/default.conf:ro" \\
+          ln -sfn "$release" "$app_dir/current"
+          docker rm -f "$container" 2>/dev/null || true
+          docker run -d \
+            --name "$container" \
+            --restart unless-stopped \
+            --network kamal \
+            -v "$app_dir/current/dist:/usr/share/nginx/html:ro" \
+            -v "$app_dir/nginx.conf:/etc/nginx/conf.d/default.conf:ro" \
             nginx:1.28-alpine
-          docker exec kamal-proxy kamal-proxy deploy "\$container" \\
-            --host "\$domain" \\
-            --target "\$container:80" \\
+          docker exec kamal-proxy kamal-proxy deploy "$container" \
+            --host "$domain" \
+            --target "$container:80" \
             --tls
           docker image prune -f >/dev/null
           EOF
