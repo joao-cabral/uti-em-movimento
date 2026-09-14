@@ -227,9 +227,9 @@ a { color: var(--blue); }
   overflow: hidden;
   box-shadow: var(--shadow);
 }
-.accordion-head { display: flex; align-items: stretch; }
-.accordion-head > button { flex: 1; min-width: 0; }
-.accordion-head .fav-inline { align-self: center; margin-right: 10px; color: var(--blue); }
+.accordion-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; }
+.accordion-head > button { width: 100%; min-width: 0; }
+.accordion-head .fav-inline { align-self: center; margin: 0 10px 0 0; color: var(--blue); }
 .accordion button { color: var(--ink); text-align: left; }
 .accordion-head > button {
   border: 0; background: var(--card);
@@ -380,8 +380,8 @@ a { color: var(--blue); }
 .box.checked { background: var(--blue); border-color: var(--blue); }
 
 .wizard-actions { display: flex; gap: 10px; margin-top: 8px; }
-.wizard-actions .secondary-btn { flex: 0 0 auto; padding: 0 18px; }
-.grow { flex: 1; }
+.wizard-actions .secondary-btn { flex: 0 0 auto; width: auto; padding: 0 18px; }
+.wizard-actions .primary-btn.grow { width: auto; min-width: 0; flex: 1 1 0; }
 
 .primary-btn {
   width: 100%;
