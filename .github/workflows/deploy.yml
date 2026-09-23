@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 concurrency:
   group: production
@@ -13,6 +14,8 @@ env:
   APP_DIR: /home/deploy/apps/uti-em-movimento
   CONTAINER_NAME: uti-em-movimento-web
   DOMAIN: uti-em-movimento.larbac.me
+  CASA_SEGURA_CONTAINER_NAME: casa-segura-web
+  CASA_SEGURA_DOMAIN: casa-segura.larbac.me
 
 jobs:
   deploy:
@@ -42,16 +45,21 @@ jobs:
         run: |
           ssh deploy@151.247.210.165 "mkdir -p '$APP_DIR/releases/$GITHUB_SHA'"
           rsync -az --delete dist/ "deploy@151.247.210.165:$APP_DIR/releases/$GITHUB_SHA/dist/"
-          rsync -az deploy/nginx.conf "deploy@151.247.210.165:$APP_DIR/nginx.conf"
+          rsync -az \
+            deploy/nginx.conf \
+            deploy/nginx-casa-segura.conf \
+            "deploy@151.247.210.165:$APP_DIR/"
 
       - name: Activate release
         run: |
-          ssh deploy@151.247.210.165 "APP_DIR='$APP_DIR' RELEASE='$APP_DIR/releases/$GITHUB_SHA' CONTAINER_NAME='$CONTAINER_NAME' DOMAIN='$DOMAIN' bash -se" <<'EOF'
+          ssh deploy@151.247.210.165 "APP_DIR='$APP_DIR' RELEASE='$APP_DIR/releases/$GITHUB_SHA' CONTAINER_NAME='$CONTAINER_NAME' DOMAIN='$DOMAIN' CASA_SEGURA_CONTAINER_NAME='$CASA_SEGURA_CONTAINER_NAME' CASA_SEGURA_DOMAIN='$CASA_SEGURA_DOMAIN' bash -se" <<'EOF'
           set -euo pipefail
           app_dir="$APP_DIR"
           release="$RELEASE"
           container="$CONTAINER_NAME"
           domain="$DOMAIN"
+          casa_container="$CASA_SEGURA_CONTAINER_NAME"
+          casa_domain="$CASA_SEGURA_DOMAIN"
 
           ln -sfn "$release" "$app_dir/current"
           docker rm -f "$container" 2>/dev/null || true
@@ -66,5 +74,23 @@ jobs:
             --host "$domain" \
             --target "$container:80" \
             --tls
+
+          if getent hosts "$casa_domain" >/dev/null; then
+            docker rm -f "$casa_container" 2>/dev/null || true
+            docker run -d \
+              --name "$casa_container" \
+              --restart unless-stopped \
+              --network kamal \
+              -v "$app_dir/current/dist:/usr/share/nginx/html:ro" \
+              -v "$app_dir/nginx-casa-segura.conf:/etc/nginx/conf.d/default.conf:ro" \
+              nginx:1.28-alpine
+            docker exec kamal-proxy kamal-proxy deploy "$casa_container" \
+              --host "$casa_domain" \
+              --target "$casa_container:80" \
+              --tls
+          else
+            echo "::warning::DNS de $casa_domain ainda não resolve; publicação adiada."
+          fi
+
           docker image prune -f >/dev/null
           EOF

@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casa Segura IA — Prevenção de Quedas</title>
+<meta name="description" content="Casa Segura IA — tecnologia e cuidado para prevenção de quedas, autonomia e segurança do idoso.">
+
+<style>
+:root{
+  --creme:#F7F1E3;
+  --creme-2:#FFFDF7;
+  --verde:#174F3A;
+  --verde-2:#24684D;
+  --verde-3:#DDEBDD;
+  --musgo:#66724A;
+  --dourado:#C9A35A;
+  --texto:#24352D;
+  --cinza:#68756E;
+  --borda:#E3DCCB;
+  --vermelho:#C93434;
+  --amarelo:#D69E19;
+  --sombra:0 12px 35px rgba(37,61,49,.10);
+  --raio:22px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--creme);
+  color:var(--texto);
+  line-height:1.55;
+}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0}
+a{text-decoration:none;color:inherit}
+
+.container{width:min(1180px,92%);margin:auto}
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(247,241,227,.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(227,220,203,.8);
+}
+.nav{
+  height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;color:var(--verde)}
+.brand svg{width:54px;height:54px}
+.brand span{font-size:1.1rem}
+.brand small{display:block;font-weight:600;color:var(--musgo);font-size:.68rem;letter-spacing:.14em}
+.navlinks{display:flex;gap:25px;color:#4E5B53;font-size:.94rem}
+.navlinks a:hover{color:var(--verde)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:13px 20px;border-radius:999px;font-weight:750;transition:.2s;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--verde);color:white;box-shadow:0 8px 20px rgba(23,79,58,.18)}
+.btn-secondary{background:white;color:var(--verde);border:1px solid var(--borda)}
+.btn-danger{background:var(--vermelho);color:white}
+.btn-gold{background:var(--dourado);color:#fff}
+
+.hero{padding:54px 0 35px}
+.hero-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:34px;align-items:center}
+.hero-copy{padding:22px 0}
+.eyebrow{
+  display:inline-flex;gap:8px;align-items:center;background:var(--verde-3);
+  color:var(--verde);padding:8px 13px;border-radius:999px;font-size:.82rem;font-weight:800;
+}
+.hero h1{font-size:clamp(2.5rem,5vw,5rem);line-height:1.03;color:var(--verde);margin:19px 0}
+.hero h1 span{color:var(--musgo)}
+.hero p{font-size:1.1rem;color:#59665E;max-width:650px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.hero-art{
+  min-height:390px;border-radius:34px;background:
+  linear-gradient(145deg,rgba(255,255,255,.5),rgba(221,235,219,.75));
+  box-shadow:var(--sombra);display:grid;place-items:center;position:relative;overflow:hidden;
+}
+.hero-art:before,.hero-art:after{
+  content:"";position:absolute;border-radius:50%;background:rgba(201,163,90,.12)
+}
+.hero-art:before{width:260px;height:260px;right:-80px;top:-70px}
+.hero-art:after{width:220px;height:220px;left:-80px;bottom:-100px}
+.couple{width:min(410px,82%);position:relative;z-index:2}
+
+.section{padding:60px 0}
+.section-head{text-align:center;max-width:720px;margin:0 auto 30px}
+.section-head h2{font-size:2rem;color:var(--verde);margin-bottom:7px}
+.section-head p{color:var(--cinza)}
+
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:17px}
+.card{
+  background:rgba(255,253,247,.9);border:1px solid var(--borda);
+  border-radius:var(--raio);padding:22px;box-shadow:var(--sombra);
+}
+.feature-icon{
+  width:47px;height:47px;border-radius:15px;background:var(--verde-3);
+  display:grid;place-items:center;font-size:1.35rem;margin-bottom:15px;
+}
+.card h3{color:var(--verde);font-size:1.04rem;margin-bottom:6px}
+.card p{font-size:.9rem;color:var(--cinza)}
+
+.workflow{
+  display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:28px
+}
+.step{
+  display:flex;align-items:center;gap:8px;color:#768079;font-weight:700;font-size:.9rem
+}
+.step b{
+  width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+  background:#E7E2D5;color:#6D756E
+}
+.step.active{color:var(--verde)}
+.step.active b{background:var(--verde);color:white}
+.line{width:42px;height:2px;background:#DDD6C6}
+
+.panel{
+  background:var(--creme-2);border:1px solid var(--borda);border-radius:28px;
+  box-shadow:var(--sombra);padding:30px;
+}
+.panel-grid{display:grid;grid-template-columns:210px 1fr;gap:28px}
+.avatar-box{background:#F1EBDD;border-radius:22px;padding:20px;text-align:center}
+.avatar{
+  width:115px;height:115px;border-radius:50%;margin:0 auto 12px;
+  background:var(--verde-3);display:grid;place-items:center;font-size:4rem;overflow:hidden
+}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.upload-label{display:inline-flex;padding:9px 13px;background:white;border:1px solid var(--borda);border-radius:12px;font-size:.82rem;font-weight:700;color:var(--verde);cursor:pointer}
+input[type=file]{display:none}
+
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.field label{display:block;font-size:.82rem;font-weight:800;color:#536159;margin:0 0 7px}
+.field input,.field select,.field textarea{
+  width:100%;padding:12px 13px;border:1px solid var(--borda);border-radius:13px;
+  background:#fffdf9;outline:none;color:var(--texto)
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--verde);box-shadow:0 0 0 3px rgba(36,104,77,.08)}
+.full{grid-column:1/-1}
+.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.photo-card{border:1px dashed #CFC6B1;border-radius:18px;padding:14px;background:#FFFCF5}
+.photo-preview{
+  height:150px;border-radius:13px;background:#EFE9D9;display:grid;place-items:center;
+  color:#7B837C;overflow:hidden;margin-bottom:11px
+}
+.photo-preview img{width:100%;height:100%;object-fit:cover}
+.photo-card strong{display:block;color:var(--verde);margin-bottom:8px}
+.tip-list{display:grid;gap:7px;margin-top:16px}
+.tip{display:flex;gap:8px;font-size:.82rem;color:#536159}
+
+.dashboard{display:grid;grid-template-columns:220px 1fr;gap:20px}
+.sidebar{background:var(--verde);color:white;border-radius:24px;padding:18px;height:max-content}
+.sidebar-brand{font-weight:800;padding:10px 9px 20px}
+.sidebar a{display:block;padding:11px 12px;border-radius:12px;margin:3px 0;color:#E6F1E9;font-size:.9rem}
+.sidebar a.active,.sidebar a:hover{background:rgba(255,255,255,.14)}
+.dash-content{display:grid;gap:17px}
+.welcome{display:flex;justify-content:space-between;gap:15px;align-items:center}
+.welcome h2{color:var(--verde);font-size:1.6rem}
+.status-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.status-card{background:#fffdf8;border:1px solid var(--borda);border-radius:20px;padding:20px}
+.status-card .emoji{font-size:1.8rem}
+.status-card h3{margin-top:9px;color:var(--verde)}
+.risk-low{border-left:6px solid #42A866}
+.risk-med{border-left:6px solid var(--amarelo)}
+.risk-high{border-left:6px solid var(--vermelho)}
+.emergency{display:flex;align-items:center;justify-content:space-between;gap:20px;background:#FFF1F1;border:1px solid #F0B8B8;border-radius:20px;padding:20px}
+.emergency strong{color:var(--vermelho)}
+
+.exercise{
+  display:grid;grid-template-columns:150px 1fr auto;gap:18px;align-items:center;
+  background:white;border:1px solid var(--borda);border-radius:18px;padding:14px
+}
+.exercise-art{height:115px;border-radius:14px;background:var(--verde-3);display:grid;place-items:center;font-size:3rem}
+.exercise h3{color:var(--verde)}
+.exercise-meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+.pill{padding:5px 9px;border-radius:999px;background:#F0EBDD;font-size:.76rem;font-weight:750}
+.timer{font-size:2rem;font-weight:850;color:var(--verde);text-align:center}
+
+.question-box{max-width:850px;margin:auto}
+.progress-track{height:10px;background:#E4DECF;border-radius:99px;overflow:hidden;margin:10px 0 25px}
+.progress-fill{height:100%;width:30%;background:var(--verde);transition:.25s}
+.question-number{font-size:.83rem;color:var(--musgo);font-weight:800}
+.question{font-size:1.45rem;color:var(--verde);font-weight:800;margin:7px 0 20px}
+.options{display:grid;gap:10px}
+.option{
+  border:1px solid var(--borda);background:#fffdf9;padding:13px 15px;border-radius:14px;
+  text-align:left;transition:.15s
+}
+.option:hover,.option.selected{border-color:var(--verde);background:#F0F7F1}
+.test-info{background:#F0F5EC;border-radius:16px;padding:15px;margin-top:18px;font-size:.87rem}
+
+.report{
+  display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:start
+}
+.risk-selector{display:grid;gap:9px}
+.risk-badge{padding:11px 14px;border-radius:13px;font-weight:850;border:1px solid transparent}
+.low{background:#E4F4E8;color:#237844;border-color:#B7DDBF}
+.medium{background:#FFF3D4;color:#916B09;border-color:#EAD38B}
+.high{background:#FFE1E1;color:#AA2626;border-color:#EDB0B0}
+.report-list{margin-top:15px;display:grid;gap:8px}
+.report-list li{list-style:none}
+.report-list li:before{content:"✓";color:var(--verde);font-weight:900;margin-right:8px}
+.signature{margin-top:20px;padding-top:16px;border-top:1px solid var(--borda)}
+.downloads{display:grid;gap:10px}
+.download-card{background:#fffdf9;border:1px solid var(--borda);border-radius:18px;padding:20px}
+.download-card h3{color:var(--verde);margin-bottom:8px}
+footer{padding:45px 0;color:#68756E;text-align:center;font-size:.86rem}
+footer strong{color:var(--verde)}
+
+.toast{
+  position:fixed;right:22px;bottom:22px;z-index:100;
+  background:var(--verde);color:white;padding:13px 18px;border-radius:14px;
+  box-shadow:var(--sombra);opacity:0;transform:translateY(15px);pointer-events:none;transition:.25s
+}
+.toast.show{opacity:1;transform:translateY(0)}
+
+@media(max-width:900px){
+  .hero-grid,.report{grid-template-columns:1fr}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .dashboard{grid-template-columns:1fr}
+  .sidebar{display:flex;overflow:auto;gap:5px}
+  .sidebar-brand{display:none}
+  .sidebar a{white-space:nowrap}
+}
+@media(max-width:650px){
+  .navlinks{display:none}
+  .nav{height:68px}
+  .hero{padding-top:28px}
+  .hero h1{font-size:2.7rem}
+  .cards,.status-grid,.photo-grid,.form-grid{grid-template-columns:1fr}
+  .panel-grid{grid-template-columns:1fr}
+  .photo-preview{height:170px}
+  .exercise{grid-template-columns:1fr}
+  .exercise-art{height:150px}
+  .workflow{justify-content:flex-start}
+  .line{width:20px}
+}
+</style>
+</head>
+
+<body>
+<div class="topbar">
+  <div class="container nav">
+    <a class="brand" href="#inicio">
+      <svg viewBox="0 0 80 80" aria-label="Logo Casa Segura IA">
+        <path d="M10 38 40 12 70 38" fill="none" stroke="#174F3A" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M19 36v30h42V36" fill="#F7F1E3" stroke="#174F3A" stroke-width="5"/>
+        <circle cx="32" cy="43" r="8" fill="#F1C39D"/>
+        <circle cx="50" cy="43" r="8" fill="#F4D2B1"/>
+        <path d="M24 54c2-8 14-8 16 0v7H24zM42 54c2-8 14-8 16 0v7H42z" fill="#66724A"/>
+        <circle cx="29" cy="42" r="1.4"/><circle cx="35" cy="42" r="1.4"/>
+        <circle cx="47" cy="42" r="1.4"/><circle cx="53" cy="42" r="1.4"/>
+        <path d="M29 47q3 3 6 0M47 47q3 3 6 0" fill="none" stroke="#7D4F3D" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <span>Casa Segura IA<small>PREVENÇÃO DE QUEDAS</small></span>
+    </a>
+    <nav class="navlinks">
+      <a href="#sobre">Sobre</a><a href="#cadastro">Cadastro</a><a href="#ambiente">Ambiente</a>
+      <a href="#painel">Meu Painel</a><a href="#relatorio">Relatório</a>
+    </nav>
+    <a class="btn btn-primary" href="#cadastro">Entrar →</a>
+  </div>
+</div>
+
+<main>
+<section class="hero" id="inicio">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">🏠 Tecnologia + cuidado</span>
+      <h1>Casa Segura <span>IA</span></h1>
+      <p><strong>Mais segurança. Mais autonomia. Mais vida.</strong></p>
+      <p style="margin-top:8px">Uma plataforma inteligente para identificar riscos de queda no ambiente, acompanhar o paciente e apoiar o trabalho do fisioterapeuta.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#cadastro">Olá, que bom te ter aqui! Vamos começar? →</a>
+        <a class="btn btn-secondary" href="#sobre">Conheça o projeto</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <svg class="couple" viewBox="0 0 420 360" aria-label="Casal de idosos em uma casa">
+        <path d="M70 145 210 35l140 110" fill="none" stroke="#174F3A" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M95 138v175h230V138" fill="#FFFDF7" stroke="#174F3A" stroke-width="11"/>
+        <path d="M175 313v-92h70v92" fill="#DDEBDD" stroke="#174F3A" stroke-width="8"/>
+        <circle cx="163" cy="150" r="38" fill="#F1C39D"/>
+        <circle cx="257" cy="150" r="38" fill="#F5D0AE"/>
+        <path d="M126 151q37-65 75 0v-19q-40-52-75 0z" fill="#ECE6DA"/>
+        <path d="M220 143q38-62 75 0v-19q-38-53-75 0z" fill="#E9E1D4"/>
+        <circle cx="150" cy="150" r="4"/><circle cx="175" cy="150" r="4"/>
+        <circle cx="244" cy="150" r="4"/><circle cx="269" cy="150" r="4"/>
+        <path d="M151 168q12 10 24 0M245 168q12 10 24 0" fill="none" stroke="#8A5544" stroke-width="4" stroke-linecap="round"/>
+        <rect x="119" y="188" width="90" height="92" rx="25" fill="#66724A"/>
+        <rect x="211" y="188" width="90" height="92" rx="25" fill="#D0A25C"/>
+        <path d="M124 280q-30 24-35 55M204 280q30 24 35 55M216 280q-22 24-26 55M296 280q25 24 31 55" fill="none" stroke="#174F3A" stroke-width="13" stroke-linecap="round"/>
+        <path d="M115 216q-35 28-42 62M304 216q34 28 40 62" fill="none" stroke="#174F3A" stroke-width="13" stroke-linecap="round"/>
+        <path d="M160 210q15 15 31 0M248 210q15 15 31 0" fill="none" stroke="#F7F1E3" stroke-width="8" stroke-linecap="round"/>
+        <path d="M40 316q55-30 110 0M270 316q55-30 110 0" fill="none" stroke="#66724A" stroke-width="10" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="sobre">
+  <div class="container">
+    <div class="section-head">
+      <h2>Por que usar o Casa Segura IA?</h2>
+      <p>Um fluxo simples, acolhedor e pensado para facilitar a prevenção de quedas e o acompanhamento fisioterapêutico.</p>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="feature-icon">🛡️</div><h3>Avaliação segura</h3><p>Organize informações do paciente e identifique fatores de risco.</p></div>
+      <div class="card"><div class="feature-icon">🏃</div><h3>Exercícios personalizados</h3><p>Apresente exercícios prescritos pelo fisioterapeuta com tempo e séries.</p></div>
+      <div class="card"><div class="feature-icon">🏠</div><h3>Orientações para o lar</h3><p>Registre riscos ambientais e recomendações para uma casa mais segura.</p></div>
+      <div class="card"><div class="feature-icon">📈</div><h3>Mais qualidade de vida</h3><p>Acompanhe a evolução e incentive autonomia e confiança.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="cadastro">
+<div class="container">
+  <div class="section-head"><h2>Cadastre suas informações</h2><p>Vamos conhecer você para personalizar sua avaliação.</p></div>
+  <div class="workflow"><div class="step active"><b>1</b> Cadastro</div><div class="line"></div><div class="step"><b>2</b> Ambiente</div><div class="line"></div><div class="step"><b>3</b> Avaliação</div><div class="line"></div><div class="step"><b>4</b> Resultados</div></div>
+  <div class="panel">
+    <div class="panel-grid">
+      <div class="avatar-box">
+        <div class="avatar" id="avatarPreview">👵🏻</div>
+        <label class="upload-label">📷 Adicionar foto<input type="file" id="profilePhoto" accept="image/*"></label>
+        <p style="font-size:.74rem;color:#778078;margin-top:8px">Foto não obrigatória</p>
+      </div>
+      <form id="patientForm">
+        <div class="form-grid">
+          <div class="field"><label>Nome completo *</label><input id="nome" required placeholder="Digite seu nome"></div>
+          <div class="field"><label>Data de nascimento *</label><input id="nascimento" type="date" required></div>
+          <div class="field"><label>Telefone</label><input id="telefone" placeholder="(92) 99999-9999"></div>
+          <div class="field"><label>Contato de emergência</label><input id="emergencia" placeholder="Nome e telefone"></div>
+          <div class="field"><label>Relação</label><select id="relacao"><option>Selecione</option><option>Filho(a)</option><option>Cônjuge</option><option>Netos</option><option>Irmão(ã)</option><option>Cuidador(a)</option><option>Outro</option></select></div>
+          <div class="field"><label>Robbie</label><select id="robbie"><option>Selecione</option><option>Independente</option><option>Precisa de auxílio</option><option>Usa dispositivo de apoio</option></select></div>
+          <div class="field full"><label>Comorbidade</label><textarea id="comorbidade" rows="2" placeholder="Informe condições importantes para a avaliação"></textarea></div>
+        </div>
+        <div class="actions"><button class="btn btn-primary" type="submit">Continuar →</button></div>
+      </form>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="ambiente">
+<div class="container">
+  <div class="section-head"><h2>Envie fotos do ambiente</h2><p>Tire ou selecione fotos da casa para auxiliar na identificação de possíveis riscos.</p></div>
+  <div class="panel">
+    <div class="photo-grid">
+      <div class="photo-card"><strong>🛋️ Sala</strong><div class="photo-preview" id="salaPreview">Adicionar foto</div><label class="upload-label">📷 Adicionar foto<input type="file" accept="image/*" data-preview="salaPreview"></label></div>
+      <div class="photo-card"><strong>🍳 Cozinha</strong><div class="photo-preview" id="cozinhaPreview">Adicionar foto</div><label class="upload-label">📷 Adicionar foto<input type="file" accept="image/*" data-preview="cozinhaPreview"></label></div>
+      <div class="photo-card"><strong>🚿 Banheiro</strong><div class="photo-preview" id="banheiroPreview">Adicionar foto</div><label class="upload-label">📷 Adicionar foto<input type="file" accept="image/*" data-preview="banheiroPreview"></label></div>
+      <div class="photo-card"><strong>🛏️ Quarto</strong><div class="photo-preview" id="quartoPreview">Adicionar foto</div><label class="upload-label">📷 Adicionar foto<input type="file" accept="image/*" data-preview="quartoPreview"></label></div>
+      <div class="photo-card"><strong>🚪 Corredor</strong><div class="photo-preview" id="corredorPreview">Adicionar foto</div><label class="upload-label">📷 Adicionar foto<input type="file" accept="image/*" data-preview="corredorPreview"></label></div>
+      <div class="photo-card"><strong>🏡 Outro ambiente</strong><div class="photo-preview" id="outroPreview">Adicionar foto</div><label class="upload-label">📷 Adicionar foto<input type="file" accept="image/*" data-preview="outroPreview"></label></div>
+    </div>
+    <div class="tip-list">
+      <div class="tip">✅ Tire fotos claras e bem iluminadas.</div>
+      <div class="tip">✅ Mostre pisos, tapetes, degraus e obstáculos.</div>
+      <div class="tip">✅ Inclua iluminação, móveis e objetos próximos às áreas de circulação.</div>
+    </div>
+    <div class="actions"><button class="btn btn-primary" id="analisarBtn">🔎 Analisar ambiente</button></div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="painel">
+<div class="container">
+  <div class="section-head"><h2>Meu Painel</h2><p>Acompanhe risco, exercícios, segurança da casa e evolução.</p></div>
+  <div class="dashboard">
+    <aside class="sidebar">
+      <div class="sidebar-brand">🏠 Casa Segura IA</div>
+      <a class="active" href="#painel">◉ Meu Painel</a>
+      <a href="#painel">◔ Meu Risco de Queda</a>
+      <a href="#exercicios">🏃 Exercícios</a>
+      <a href="#seguranca">⌂ Segurança da Casa</a>
+      <a href="#evolucao">↗ Minha Evolução</a>
+      <a href="#emergencia">🚨 Emergência</a>
+      <a href="#relatorio">▣ Meus Relatórios</a>
+    </aside>
+    <div class="dash-content">
+      <div class="welcome"><div><h2>Olá, <span id="nomePainel">Maria</span>! 👋</h2><p style="color:var(--cinza)">Que bom te ver por aqui!</p></div><span style="font-size:1.6rem">🔔</span></div>
+      <div class="status-grid">
+        <div class="status-card risk-low"><div class="emoji">🟢</div><h3>Meu risco de queda</h3><p id="riskText">Baixo — avaliação inicial do ambiente.</p></div>
+        <div class="status-card"><div class="emoji">🏃</div><h3>Exercícios</h3><p>Exercícios personalizados pelo fisioterapeuta.</p><a href="#exercicios" class="btn btn-secondary" style="margin-top:12px;padding:9px 13px">Ver exercícios</a></div>
+        <div class="status-card"><div class="emoji">🏠</div><h3>Segurança da casa</h3><p>Veja pequenas mudanças que podem fazer diferença.</p><a href="#seguranca" class="btn btn-secondary" style="margin-top:12px;padding:9px 13px">Ver orientações</a></div>
+        <div class="status-card"><div class="emoji">📈</div><h3>Minha evolução</h3><p>Acompanhe seu progresso ao longo do tempo.</p><a href="#evolucao" class="btn btn-secondary" style="margin-top:12px;padding:9px 13px">Acompanhar</a></div>
+      </div>
+      <div class="emergency" id="emergencia"><div><strong>🚨 Emergência</strong><p>Precisa de ajuda? Ligue para seu contato importante.</p></div><button class="btn btn-danger" id="emergencyBtn">Ligar agora →</button></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="exercicios">
+<div class="container">
+  <div class="section-head"><h2>🏃 Exercícios personalizados</h2><p>Área preparada para receber os exercícios prescritos pelo fisioterapeuta.</p></div>
+  <div class="panel">
+    <div class="exercise">
+      <div class="exercise-art">🪑🧓</div>
+      <div>
+        <h3>Elevação de perna</h3><p>Fortalecimento de pernas e joelhos.</p>
+        <div class="exercise-meta"><span class="pill">Tempo: 00:30</span><span class="pill">Séries: 3</span><span class="pill">Repetições: 10</span></div>
+      </div>
+      <div><div class="timer" id="timer">00:30</div><button class="btn btn-primary" id="startExercise">▶ Iniciar</button></div>
+    </div>
+    <div style="margin-top:20px"><div class="progress-track"><div class="progress-fill" id="exerciseProgress" style="width:0"></div></div><div style="display:flex;justify-content:space-between;font-size:.78rem;color:var(--cinza)"><span>1 Preparar</span><span>2 Em execução</span><span>3 Finalizado</span></div></div>
+    <p style="margin-top:18px;padding:13px;background:#FFF7E5;border-radius:13px;font-size:.82rem;color:#756340">⚠️ Os exercícios devem ser definidos e ajustados pelo fisioterapeuta responsável. Esta área é uma demonstração da interface.</p>
+  </div>
+</div>
+</section>
+
+<section class="section" id="avaliacao">
+<div class="container">
+  <div class="section-head"><h2>📝 Avaliação</h2><p>Explicação simples, perguntas uma por uma, barra de progresso e registro dos resultados.</p></div>
+  <div class="panel question-box">
+    <div class="question-number" id="qNumber">PERGUNTA 1 DE 10</div>
+    <div class="progress-track"><div class="progress-fill" id="qProgress"></div></div>
+    <div class="question" id="questionText">Você teve alguma queda nos últimos 6 meses?</div>
+    <div class="options" id="options">
+      <button class="option">Sim</button><button class="option">Não</button><button class="option">Não me lembro</button>
+    </div>
+    <div class="test-info"><strong>💡 Explicação simples</strong><br>Esta pergunta ajuda a identificar fatores que podem aumentar o risco de quedas.</div>
+    <div class="actions"><button class="btn btn-secondary" id="prevQ">← Voltar</button><button class="btn btn-primary" id="nextQ">Próxima →</button></div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="seguranca">
+<div class="container">
+  <div class="section-head"><h2>🏠 Segurança da casa</h2><p>Exemplos de fatores que podem ser registrados durante a avaliação do ambiente.</p></div>
+  <div class="cards">
+    <div class="card"><div class="feature-icon">🚨</div><h3>Retirar tapetes soltos</h3><p>Reduza superfícies que podem deslizar ou formar obstáculos.</p></div>
+    <div class="card"><div class="feature-icon">💡</div><h3>Melhorar iluminação</h3><p>Priorize corredores, banheiro, quarto e áreas de circulação.</p></div>
+    <div class="card"><div class="feature-icon">🛡️</div><h3>Instalar barras de apoio</h3><p>Avaliar necessidade e posicionamento com profissional habilitado.</p></div>
+    <div class="card"><div class="feature-icon">🧹</div><h3>Organizar fios e cabos</h3><p>Mantenha as áreas de passagem livres e organizadas.</p></div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="evolucao">
+<div class="container">
+  <div class="section-head"><h2>📈 Minha evolução</h2><p>Um espaço visual para acompanhar resultados registrados ao longo do tempo.</p></div>
+  <div class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap">
+      <strong style="color:var(--verde)">Evolução do paciente</strong>
+      <select style="padding:8px 12px;border:1px solid var(--borda);border-radius:10px"><option>Semana</option><option>Mês</option><option>Trimestre</option><option>Ano</option></select>
+    </div>
+    <svg viewBox="0 0 800 260" width="100%" style="margin-top:20px">
+      <path d="M50 210H750M50 160H750M50 110H750M50 60H750" stroke="#E4DECF" stroke-width="2"/>
+      <polyline points="55,205 190,180 330,153 470,122 610,90 745,52" fill="none" stroke="#174F3A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <g fill="#174F3A"><circle cx="55" cy="205" r="7"/><circle cx="190" cy="180" r="7"/><circle cx="330" cy="153" r="7"/><circle cx="470" cy="122" r="7"/><circle cx="610" cy="90" r="7"/><circle cx="745" cy="52" r="7"/></g>
+    </svg>
+    <div class="cards" style="grid-template-columns:repeat(3,1fr);box-shadow:none">
+      <div class="card"><h3>Equilíbrio</h3><p style="font-size:1.4rem;color:var(--verde);font-weight:850">↑ 25%</p></div>
+      <div class="card"><h3>Força</h3><p style="font-size:1.4rem;color:var(--verde);font-weight:850">↑ 18%</p></div>
+      <div class="card"><h3>Confiança</h3><p style="font-size:1.4rem;color:var(--verde);font-weight:850">↑ 30%</p></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section" id="relatorio">
+<div class="container">
+  <div class="section-head"><h2>📋 Seu diagnóstico está pronto!</h2><p>Relatório demonstrativo com avaliação do paciente e do ambiente.</p></div>
+  <div class="report">
+    <div class="panel">
+      <h3 style="color:var(--verde);margin-bottom:12px">Nível de risco de queda</h3>
+      <div class="risk-selector">
+        <div class="risk-badge low">🟢 Baixo</div>
+        <div class="risk-badge medium">🟡 Moderado</div>
+        <div class="risk-badge high">🔴 Alto</div>
+      </div>
+      <h3 style="color:var(--verde);margin-top:22px">Fatores identificados</h3>
+      <ul class="report-list">
+        <li>Desequilíbrio em superfícies irregulares</li>
+        <li>Iluminação insuficiente no banheiro</li>
+        <li>Uso de tapetes soltos</li>
+        <li>Força de membros inferiores reduzida</li>
+      </ul>
+      <h3 style="color:var(--verde);margin-top:22px">Recomendações</h3>
+      <ul class="report-list">
+        <li>Realizar exercícios de fortalecimento prescritos</li>
+        <li>Melhorar iluminação das áreas de circulação</li>
+        <li>Avaliar instalação de barras de apoio</li>
+        <li>Retirar tapetes soltos e obstáculos</li>
+      </ul>
+      <div class="signature">
+        <strong>Fisioterapeuta responsável: Kézia Michelle</strong><br>
+        CREFITO: ____________________
+      </div>
+    </div>
+    <div class="downloads">
+      <div class="download-card">
+        <h3>Baixar relatório</h3>
+        <p style="font-size:.88rem;color:var(--cinza);margin-bottom:14px">Escolha o formato para salvar ou compartilhar.</p>
+        <button class="btn btn-danger" style="width:100%;margin-bottom:9px" id="pdfBtn">📄 Baixar PDF</button>
+        <button class="btn btn-primary" style="width:100%;margin-bottom:9px" id="wordBtn">📝 Baixar Word</button>
+        <button class="btn btn-secondary" style="width:100%" id="shareBtn">↗ Compartilhar</button>
+      </div>
+      <div class="download-card" style="background:var(--verde);color:white">
+        <strong style="font-size:1.15rem">Mais segurança.<br>Mais autonomia.<br>Mais vida. 💚</strong>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+</main>
+
+<footer>
+  <div class="container"><strong>Casa Segura IA</strong> • Prevenção de quedas • Tecnologia e cuidado para mais autonomia.<br><span>Protótipo demonstrativo — conteúdo clínico deve ser definido pelo fisioterapeuta responsável.</span></div>
+</footer>
+
+<div class="toast" id="toast">Pronto!</div>
+
+<script>
+const toast = (msg)=>{
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+};
+
+document.getElementById('profilePhoto').addEventListener('change', e=>{
+  const file=e.target.files[0]; if(!file)return;
+  const img=document.createElement('img'); img.src=URL.createObjectURL(file);
+  const box=document.getElementById('avatarPreview'); box.innerHTML=''; box.appendChild(img);
+});
+
+document.querySelectorAll('input[type=file][data-preview]').forEach(input=>{
+  input.addEventListener('change', e=>{
+    const file=e.target.files[0]; if(!file)return;
+    const box=document.getElementById(e.target.dataset.preview);
+    box.innerHTML='';
+    const img=document.createElement('img'); img.src=URL.createObjectURL(file); box.appendChild(img);
+  });
+});
+
+document.getElementById('patientForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const nome=document.getElementById('nome').value.trim();
+  document.getElementById('nomePainel').textContent=nome || 'Maria';
+  toast('Cadastro salvo com sucesso!');
+  document.getElementById('painel').scrollIntoView({behavior:'smooth'});
+});
+
+document.getElementById('analisarBtn').addEventListener('click', ()=>{
+  document.getElementById('riskText').textContent='Avaliação do ambiente pronta para revisão profissional.';
+  toast('Fotos registradas! A área de análise está pronta para receber a avaliação da IA.');
+  document.getElementById('painel').scrollIntoView({behavior:'smooth'});
+});
+
+let seconds=30, timerInterval=null;
+const timerEl=document.getElementById('timer'), prog=document.getElementById('exerciseProgress');
+document.getElementById('startExercise').addEventListener('click', function(){
+  if(timerInterval)return;
+  this.disabled=true; this.textContent='⏸ Em execução';
+  timerInterval=setInterval(()=>{
+    seconds--;
+    timerEl.textContent='00:'+String(seconds).padStart(2,'0');
+    prog.style.width=((30-seconds)/30*100)+'%';
+    if(seconds<=0){
+      clearInterval(timerInterval); timerInterval=null; this.disabled=false; this.textContent='↻ Reiniciar';
+      toast('Exercício finalizado!');
+      seconds=30;
+    }
+  },1000);
+});
+
+const questions=[
+ 'Você teve alguma queda nos últimos 6 meses?',
+ 'Você sente insegurança ao caminhar?',
+ 'Você utiliza algum dispositivo de apoio?',
+ 'Há tapetes soltos em sua casa?',
+ 'O banheiro possui barras de apoio?',
+ 'A iluminação da casa é adequada?',
+ 'Você sente fraqueza nas pernas?',
+ 'Você precisa de ajuda para levantar da cadeira?',
+ 'Você evita algumas atividades por medo de cair?',
+ 'Você se sente seguro para caminhar dentro de casa?'
+];
+let q=0;
+function renderQ(){
+  document.getElementById('qNumber').textContent=`PERGUNTA ${q+1} DE ${questions.length}`;
+  document.getElementById('qProgress').style.width=((q+1)/questions.length*100)+'%';
+  document.getElementById('questionText').textContent=questions[q];
+}
+document.getElementById('nextQ').addEventListener('click',()=>{
+  if(q<questions.length-1){q++;renderQ()}else{toast('Avaliação concluída e resultados registrados!');document.getElementById('relatorio').scrollIntoView({behavior:'smooth'})}
+});
+document.getElementById('prevQ').addEventListener('click',()=>{if(q>0){q--;renderQ()}});
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('option')){
+    e.target.parentElement.querySelectorAll('.option').forEach(x=>x.classList.remove('selected'));
+    e.target.classList.add('selected');
+  }
+});
+
+document.getElementById('emergencyBtn').addEventListener('click',()=>{
+  const raw=document.getElementById('emergencia').value.trim();
+  const phone=raw.match(/\+?\d[\d\s().-]{7,}/);
+  if(phone){ window.location.href='tel:'+phone[0].replace(/\D/g,''); }
+  else toast('Cadastre primeiro o telefone do contato de emergência.');
+});
+
+document.getElementById('pdfBtn').addEventListener('click',()=>{
+  toast('Abrindo impressão: escolha “Salvar como PDF”.');
+  setTimeout(()=>window.print(),500);
+});
+
+document.getElementById('wordBtn').addEventListener('click',()=>{
+  const nome=document.getElementById('nome').value || 'Paciente';
+  const htmlDoc=`<html><head><meta charset="UTF-8"><title>Relatório Casa Segura IA</title></head><body>
+  <h1>Casa Segura IA</h1><h2>Relatório de Avaliação</h2>
+  <p><strong>Paciente:</strong> ${nome}</p>
+  <h3>Nível de risco de queda</h3><p>🟢 Baixo &nbsp; 🟡 Moderado &nbsp; 🔴 Alto</p>
+  <h3>Fatores identificados</h3><ul><li>Desequilíbrio em superfícies irregulares</li><li>Iluminação insuficiente no banheiro</li><li>Uso de tapetes soltos</li><li>Força de membros inferiores reduzida</li></ul>
+  <h3>Recomendações</h3><ul><li>Realizar exercícios prescritos</li><li>Melhorar iluminação</li><li>Avaliar barras de apoio</li><li>Retirar obstáculos</li></ul>
+  <p><strong>Fisioterapeuta responsável:</strong> Kézia Michelle</p><p><strong>CREFITO:</strong> ____________________</p>
+  </body></html>`;
+  const blob=new Blob([htmlDoc],{type:'application/msword'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Relatorio-Casa-Segura-IA.doc'; a.click();
+  URL.revokeObjectURL(a.href); toast('Relatório Word gerado!');
+});
+
+document.getElementById('shareBtn').addEventListener('click',async()=>{
+  const data={title:'Casa Segura IA',text:'Relatório de avaliação — Casa Segura IA'};
+  if(navigator.share){try{await navigator.share(data)}catch(e){}}
+  else{await navigator.clipboard?.writeText(location.href);toast('Link copiado para compartilhar!')}
+});
+</script>
+</body>
+</html>
