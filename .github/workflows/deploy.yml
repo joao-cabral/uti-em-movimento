@@ -75,22 +75,18 @@ jobs:
             --target "$container:80" \
             --tls
 
-          if getent hosts "$casa_domain" >/dev/null; then
-            docker rm -f "$casa_container" 2>/dev/null || true
-            docker run -d \
-              --name "$casa_container" \
-              --restart unless-stopped \
-              --network kamal \
-              -v "$app_dir/current/dist:/usr/share/nginx/html:ro" \
-              -v "$app_dir/nginx-casa-segura.conf:/etc/nginx/conf.d/default.conf:ro" \
-              nginx:1.28-alpine
-            docker exec kamal-proxy kamal-proxy deploy "$casa_container" \
-              --host "$casa_domain" \
-              --target "$casa_container:80" \
-              --tls
-          else
-            echo "::warning::DNS de $casa_domain ainda não resolve; publicação adiada."
-          fi
+          docker rm -f "$casa_container" 2>/dev/null || true
+          docker run -d \
+            --name "$casa_container" \
+            --restart unless-stopped \
+            --network kamal \
+            -v "$app_dir/current/dist:/usr/share/nginx/html:ro" \
+            -v "$app_dir/nginx-casa-segura.conf:/etc/nginx/conf.d/default.conf:ro" \
+            nginx:1.28-alpine
+          docker exec kamal-proxy kamal-proxy deploy "$casa_container" \
+            --host "$casa_domain" \
+            --target "$casa_container:80" \
+            --tls
 
           docker image prune -f >/dev/null
           EOF
